@@ -456,11 +456,7 @@ class WebhookClient extends RichMessage
         $messages = [];
 
         foreach ($this->messages as $message) {
-            if ($message instanceof Payload) {
-                $out['data'] = $message->render();
-            } else {
-                $messages[] = $message->render();
-            }
+            $messages[] = $message->render();
         }
 
         $out['messages'] = $messages;
@@ -502,11 +498,7 @@ class WebhookClient extends RichMessage
         $messages = [];
 
         foreach ($this->messages as $message) {
-            if ($message instanceof Payload) {
-                $out['payload'] = $message->render();
-            } else {
                 $messages[] = $message->render();
-            }
         }
 
         if (count($messages)) {

@@ -44,6 +44,6 @@ class Payload extends RichMessage
      */
     public function render()
     {
-        return [$this->requestSource => $this->payload];
+        return $this->payload;
     }
 }
