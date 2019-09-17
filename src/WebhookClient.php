@@ -297,10 +297,6 @@ class WebhookClient extends RichMessage
                 $this->text = $message;
             }
         } elseif ($message instanceof RichMessage) {
-            if (! $this->doesSupportRichMessage()) {
-                $this->text = $message->getFallbackText();
-            }
-
             $message->setAgentVersion($this->agentVersion)
                 ->setRequestSource($this->requestSource);
 
@@ -456,7 +452,11 @@ class WebhookClient extends RichMessage
         $messages = [];
 
         foreach ($this->messages as $message) {
-            $messages[] = $message->render();
+                    if ($message instanceof Payload) {
+                        $out['data'] = $message->render();
+                    } else {
+                        $messages[] = $message->render();
+                    }
         }
 
         $out['messages'] = $messages;
@@ -498,7 +498,14 @@ class WebhookClient extends RichMessage
         $messages = [];
 
         foreach ($this->messages as $message) {
+             if ($message instanceof Payload) {
+                if (!isset($out['payload']['data']))
+                    $out['payload'] = ['data' => [$message->render()]];
+                else
+                    $out['payload']['data'][] = $message->render();
+            } else {
                 $messages[] = $message->render();
+            }
         }
 
         if (count($messages)) {
